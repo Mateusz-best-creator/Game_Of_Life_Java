@@ -1,5 +1,6 @@
 package Organisms.Plants;
 
+import Organisms.Enums.OrganismType;
 import Organisms.Organism;
 import Organisms.Plant;
 
@@ -9,7 +10,7 @@ public class Guarana extends Plant
 {
     public Guarana(int row, int column)
     {
-        super(0, 0, "Guarana", 'U', row, column, "guarana.png");
+        super(0, 0, "Guarana", 'U', row, column, "guarana.png", OrganismType.GUARANA);
     }
 
     @Override

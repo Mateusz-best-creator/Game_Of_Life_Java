@@ -1,5 +1,6 @@
 package Organisms.Plants;
 
+import Organisms.Enums.OrganismType;
 import Organisms.Organism;
 import Organisms.Plant;
 
@@ -9,7 +10,7 @@ public class SowThistle extends Plant
 {
     public SowThistle(int row, int column)
     {
-        super(0, 0, "Sow_thistle", 'S', row, column, "sow_thistle.png");
+        super(0, 0, "Sow_thistle", 'S', row, column, "sow_thistle.png", OrganismType.SOW_THISTLE);
     }
 
     @Override

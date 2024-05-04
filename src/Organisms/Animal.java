@@ -1,14 +1,15 @@
 package Organisms;
 
 import Organisms.Enums.Direction;
+import Organisms.Enums.OrganismType;
 
 import java.util.Vector;
 
 public abstract class Animal extends Organism
 {
-    public Animal(int strength, int initiative, String name, char character, int row, int column, String image_name)
+    public Animal(int strength, int initiative, String name, char character, int row, int column, String image_name, OrganismType type)
     {
-        super(strength, initiative, name, character, row, column, image_name);
+        super(strength, initiative, name, character, row, column, image_name, type);
     }
 
     @Override

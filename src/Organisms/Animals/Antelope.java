@@ -2,6 +2,7 @@ package Organisms.Animals;
 
 import Organisms.Animal;
 import Organisms.Enums.Direction;
+import Organisms.Enums.OrganismType;
 import Organisms.Organism;
 
 import java.util.Vector;
@@ -10,7 +11,7 @@ public class Antelope extends Animal
 {
     public Antelope(int row, int column)
     {
-        super(4, 4, "antelope", 'a', row, column, "antelope.png");
+        super(4, 4, "antelope", 'a', row, column, "antelope.png", OrganismType.ANTELOPE);
     }
 
     @Override

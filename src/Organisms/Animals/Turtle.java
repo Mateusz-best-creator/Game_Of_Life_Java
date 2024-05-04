@@ -1,6 +1,7 @@
 package Organisms.Animals;
 
 import Organisms.Animal;
+import Organisms.Enums.OrganismType;
 import Organisms.Organism;
 
 import java.util.Vector;
@@ -9,7 +10,7 @@ public class Turtle extends Animal
 {
     public Turtle(int row, int column)
     {
-        super(2, 1, "turtle", 't', row, column, "turtle.png");
+        super(2, 1, "turtle", 't', row, column, "turtle.png", OrganismType.TURTLE);
     }
 
     @Override

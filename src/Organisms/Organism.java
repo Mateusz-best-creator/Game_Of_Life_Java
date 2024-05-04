@@ -1,5 +1,7 @@
 package Organisms;
 
+import Organisms.Enums.OrganismType;
+
 import java.awt.*;
 
 import java.util.Random;
@@ -15,8 +17,9 @@ public abstract class Organism
 
     static protected Random randomGenerator = new Random();
     protected int row, column;
+    private OrganismType type;
 
-    public Organism(int strength, int initiative, String name, char character, int row, int column, String image_name)
+    public Organism(int strength, int initiative, String name, char character, int row, int column, String image_name, OrganismType type)
     {
         this.name = name;
         this.strength = strength;
@@ -26,6 +29,7 @@ public abstract class Organism
         this.column = column;
         this.organismImage = Toolkit.getDefaultToolkit().getImage("/home/mateusz/IdeaProjects/PLs/src/Assets/" + image_name);
         this.age = 0;
+        this.type = type;
     }
 
     public abstract void action(char[][] grid_board);
@@ -74,6 +78,11 @@ public abstract class Organism
     public int get_column()
     {
         return this.column;
+    }
+
+    public OrganismType get_type()
+    {
+        return this.type;
     }
 
     public void organism_move_left()

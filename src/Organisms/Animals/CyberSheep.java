@@ -1,6 +1,7 @@
 package Organisms.Animals;
 
 import Organisms.Animal;
+import Organisms.Enums.OrganismType;
 import Organisms.Organism;
 
 import java.util.Vector;
@@ -11,7 +12,7 @@ public class CyberSheep extends Animal
 
     public CyberSheep(int row, int column)
     {
-        super(11, 4, "cyber_sheep", 'c', row, column, "cyber_sheep.png");
+        super(11, 4, "cyber_sheep", 'c', row, column, "cyber_sheep.png", OrganismType.CYBER_SHEEP);
     }
 
     @Override

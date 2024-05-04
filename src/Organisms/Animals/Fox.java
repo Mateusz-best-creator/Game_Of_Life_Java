@@ -2,6 +2,7 @@ package Organisms.Animals;
 
 import Organisms.Animal;
 import Organisms.Enums.Direction;
+import Organisms.Enums.OrganismType;
 import Organisms.Organism;
 
 import java.util.Vector;
@@ -10,7 +11,7 @@ public class Fox extends Animal
 {
     public Fox(int row, int column)
     {
-        super(3, 7, "fox", 'f', row, column, "fox.png");
+        super(3, 7, "fox", 'f', row, column, "fox.png", OrganismType.FOX);
     }
 
     @Override
