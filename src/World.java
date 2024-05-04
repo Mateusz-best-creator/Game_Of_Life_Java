@@ -20,8 +20,15 @@ public class World
     Random rand = new Random();
     int turn_number = 1;
 
+    JFrame frame;
+
     public World(int height, int width)
     {
+        this.frame = new JFrame("Mateusz Wieczorek s197743");
+        frame.setSize(this.screen_width, this.screen_height + 35);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         this.board_height = height;
         this.board_width = width;
 
@@ -39,11 +46,7 @@ public class World
 
     private void drawBoard()
     {
-        JFrame frame = new JFrame("Mateusz Wieczorek s197743");
-        frame.setSize(this.screen_width, this.screen_height + 35);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(new Panel(this.board_height, this.board_width, this.screen_height, this.screen_width,
+        this.frame.setContentPane(new Panel(this.board_height, this.board_width, this.screen_height, this.screen_width,
                 this.image_height, this.image_width, this.organisms));
         frame.setVisible(true);
     }
@@ -82,7 +85,7 @@ public class World
                 random_row = rand.nextInt(this.board_height);
                 random_column = rand.nextInt(this.board_width);
             }
-
+            int start_size = this.organisms.size();
             switch (type)
             {
                 case HUMAN:
@@ -125,7 +128,11 @@ public class World
                     System.out.println("Wrong organism type!!!\n");
                     break;
             }
-            this.grid_board[random_row][random_column] = this.organisms.get(this.organisms.size() - 1).get_character();
+            int new_size = this.organisms.size();
+            if (new_size > start_size)
+            {
+                this.grid_board[random_row][random_column] = this.organisms.get(this.organisms.size() - 1).get_character();
+            }
         }
     }
 
@@ -139,7 +146,7 @@ public class World
             int organism_index = 0;
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -156,7 +163,7 @@ public class World
             // Draw board after changes
             this.drawBoard();
             System.out.println("End of play function = ###\tTurn " + this.turn_number + "\t###");
-            break;
+            if (this.turn_number == 20) break;
         }
     }
 

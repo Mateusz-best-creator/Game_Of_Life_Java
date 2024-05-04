@@ -15,7 +15,16 @@ public class Turtle extends Animal
     @Override
     public void action(char[][] grid_board)
     {
-
+        int value = randomGenerator.nextInt(4) + 1;
+        // Turtle has 75% chance to stay at current position
+        if (value == 4)
+        {
+            this.default_action_animal(grid_board);
+        }
+        else
+        {
+            System.out.println(this.get_name() + " stays at current position: (" + this.row + ", " + this.column + ")");
+        }
     }
 
     @Override

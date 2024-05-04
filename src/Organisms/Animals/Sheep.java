@@ -15,7 +15,7 @@ public class Sheep extends Animal
     @Override
     public void action(char[][] grid_board)
     {
-
+        this.default_action_animal(grid_board);
     }
 
     @Override

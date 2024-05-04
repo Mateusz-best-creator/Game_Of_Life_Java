@@ -49,7 +49,7 @@ public class Panel extends JPanel
             o_image = o.get_image();
             o_row = o.get_row();
             o_column = o.get_column();
-            g.drawImage(o_image, o_row * image_width, o_column * image_height, image_width, image_height, null);
+            g.drawImage(o_image, o_column * image_width, o_row * image_height, image_width, image_height, null);
         }
 
         // Draw vertical lines

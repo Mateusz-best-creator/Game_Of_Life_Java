@@ -9,7 +9,7 @@ public class SosnowskyHogweed extends Plant
 {
     public SosnowskyHogweed(int row, int column)
     {
-        super(10, 0, "Sosnowsky_hogweed", 'U', row, column, "sosnowsky_hogweed.png");
+        super(10, 0, "Sosnowsky_hogweed", 'O', row, column, "sosnowsky_hogweed.png");
     }
 
     @Override

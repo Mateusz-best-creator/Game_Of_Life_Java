@@ -18,6 +18,7 @@ public abstract class Animal extends Organism
 
     protected void default_action_animal(char[][] grid_board)
     {
+        grid_board[this.row][this.column] = 'e';
         int board_height = grid_board.length;
         int board_width = grid_board[0].length;
 
@@ -27,12 +28,14 @@ public abstract class Animal extends Organism
             if ((this.row == 0 && direction == Direction.TOP)
             || (this.row == board_height - 1 && direction == Direction.BOTTOM)
             || (this.column == 0 && direction == Direction.LEFT)
-            || (this.column == board_width && direction == Direction.RIGHT))
+            || (this.column == board_width - 1 && direction == Direction.RIGHT))
             {
                 direction = Direction.fromInteger(randomGenerator.nextInt(Direction.values().length) + 1);
             }
             else
+            {
                 break;
+            }
         }
         switch (direction)
         {
@@ -52,6 +55,8 @@ public abstract class Animal extends Organism
                 System.out.println("Invalid direction at default_animal_action(...)\n");
                 break;
         }
+        assert(this.row > 0 && this.row < board_height && this.column > 0 && this.column < board_width);
+        grid_board[this.row][this.column] = this.get_character();
     }
 
     protected void default_animal_collision()
