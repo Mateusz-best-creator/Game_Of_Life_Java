@@ -23,6 +23,11 @@ public class Turtle extends Animal
     {
         return TURTLE_COUNTER;
     }
+    @Override
+    public void decrease_static_counter()
+    {
+        TURTLE_COUNTER -= 1;
+    }
 
     @Override
     public void action(char[][] grid_board)
@@ -44,6 +49,6 @@ public class Turtle extends Animal
     @Override
     public CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
     {
-        return new CollisionResult(CollisionType.NONE, -1, -1);
+        return this.default_animal_collision(grid_board, organisms, current_index);
     }
 }

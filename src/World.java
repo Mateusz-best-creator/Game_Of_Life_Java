@@ -1,18 +1,19 @@
 
 import javax.swing.*;
-import java.util.Vector;
-import java.util.Random;
+import java.awt.event.KeyEvent;
+import java.util.*;
 
 import Organisms.Animals.*;
 import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Plants.*;
 import Organisms.Organism;
 import Organisms.Enums.OrganismType;
+import Organisms.Animals.KeyboardPress;
+import Organisms.Plants.SosnowskyHogweed;
 
 public class World
 {
     static protected int MAX_ANIMAL_AMOUNT = 5;
+    Map<String, Integer> entityQuantities = new HashMap<>();
 
     int board_height, board_width;
     int screen_height = 800, screen_width = 800;
@@ -50,6 +51,7 @@ public class World
 
         this.organisms = new Vector<>();
         this.initialize_organisms();
+        this.sort_organisms();
     }
 
     private void drawBoard()
@@ -57,6 +59,14 @@ public class World
         this.frame.setContentPane(new Panel(this.board_height, this.board_width, this.screen_height, this.screen_width,
                 this.image_height, this.image_width, this.organisms));
         frame.setVisible(true);
+    }
+
+    private void sort_organisms()
+    {
+        Comparator<Organism> compareInitiative = Comparator.comparing(Organism::get_initiative);
+        Comparator<Organism> compareAge = Comparator.comparing(Organism::get_age);
+        Comparator<Organism> compare = compareInitiative.thenComparing(compareAge);
+        this.organisms.sort(compare);
     }
 
     private void initialize_organisms()
@@ -80,6 +90,8 @@ public class World
                 this.add_organism(type, 1, -1, -1);
             else
                 this.add_organism(type, randomAmount, -1, -1);
+            Organism o = this.organisms.get(this.organisms.size() - 1);
+            this.entityQuantities.put(o.get_name(), o.get_organism_counter());
         }
     }
 
@@ -103,27 +115,27 @@ public class World
             int start_size = this.organisms.size();
             switch (type)
             {
-//                case HUMAN:
-//                    this.organisms.add(new Human(random_row, random_column));
+                case HUMAN:
+                    this.organisms.add(new Human(random_row, random_column));
+                    break;
+//                case WOLF:
+//                    this.organisms.add(new Wolf(random_row, random_column));
 //                    break;
-                case WOLF:
-                    this.organisms.add(new Wolf(random_row, random_column));
-                    break;
-                case SHEEP:
-                    this.organisms.add(new Sheep(random_row, random_column));
-                    break;
-                case FOX:
-                    this.organisms.add(new Fox(random_row, random_column));
-                    break;
+//                case SHEEP:
+//                    this.organisms.add(new Sheep(random_row, random_column));
+//                    break;
+//                case FOX:
+//                    this.organisms.add(new Fox(random_row, random_column));
+//                    break;
 //                case TURTLE:
 //                    this.organisms.add(new Turtle(random_row, random_column));
 //                    break;
 //                case ANTELOPE:
 //                    this.organisms.add(new Antelope(random_row, random_column));
 //                    break;
-//                case CYBER_SHEEP:
-//                    this.organisms.add(new CyberSheep(random_row, random_column));
-//                    break;
+                case CYBER_SHEEP:
+                    this.organisms.add(new CyberSheep(random_row, random_column));
+                    break;
 //                case GRASS:
 //                    this.organisms.add(new Grass(random_row, random_column));
 //                    break;
@@ -136,9 +148,9 @@ public class World
 //                case BELLADONNA:
 //                    this.organisms.add(new Belladonna(random_row, random_column));
 //                    break;
-//                case SOSNOWSKY_HOGWEED:
-//                    this.organisms.add(new SosnowskyHogweed(random_row, random_column));
-//                    break;
+                case SOSNOWSKY_HOGWEED:
+                    this.organisms.add(new SosnowskyHogweed(random_row, random_column));
+                    break;
                 default:
                     System.out.println("Wrong organism type: " + type.name());
                     break;
@@ -155,16 +167,13 @@ public class World
     {
         // Draw starting board
         this.drawBoard();
+        // sort organisms
+        this.sort_organisms();
+
         do
         {
             System.out.println("###\tTurn " + this.turn_number + "\t###");
             int organism_index = 0;
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             for (Organism organism : this.organisms)
             {
@@ -176,6 +185,11 @@ public class World
                 }
 
                 organism.action(this.grid_board);
+                if (organism instanceof KeyboardPress)
+                {
+                    // Cast the organism to KeyboardControllable and call handleKeyboardInput
+                    ((KeyboardPress) organism).handleKeyboardInput(frame);
+                }
                 CollisionResult collision_type = organism.collision(this.grid_board, this.organisms, organism_index);
                 int row = collision_type.get_row();
                 int col = collision_type.get_col();
@@ -244,23 +258,24 @@ public class World
                 if (added)
                     break;
             }
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     // Remove organisms after collisions
     private void remove_organisms()
     {
+        Comparator<Integer> comp = Collections.reverseOrder();
+        this.organism_indexes_to_remove.sort(comp);
+
         for (int i = this.organism_indexes_to_remove.size() - 1; i >= 0; i--)
         {
             int index = this.organism_indexes_to_remove.get(i);
             int row = this.organisms_coords_to_remove.get(i).get_row();
             int col = this.organisms_coords_to_remove.get(i).get_col();
             System.out.println("Removing " + this.organisms.get(index).get_type() + " at (" + row + ", " + col + ")");
+
+            //Decrement static counter
+            this.organisms.get(index).decrease_static_counter();
             // Remove organism from vector that has index i
             this.organisms.remove(index);
         }

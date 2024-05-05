@@ -2,10 +2,14 @@ package Organisms;
 
 import Organisms.Enums.CollisionResult;
 import Organisms.Enums.CollisionType;
+import Organisms.Enums.Direction;
 import Organisms.Enums.OrganismType;
 
+import javax.swing.*;
 import java.awt.*;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 import java.util.Vector;
 
@@ -39,6 +43,7 @@ public abstract class Organism
     public abstract void action(char[][] grid_board);
     public abstract CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
     public abstract int get_organism_counter();
+    public abstract void decrease_static_counter();
 
     public Image get_image()
     {

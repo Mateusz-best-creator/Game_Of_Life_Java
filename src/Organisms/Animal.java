@@ -23,6 +23,8 @@ public abstract class Animal extends Organism
     public abstract CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
     @Override
     public abstract int get_organism_counter();
+    @Override
+    public abstract void decrease_static_counter();
 
     protected void default_action_animal(char[][] grid_board)
     {

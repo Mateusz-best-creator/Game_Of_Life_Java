@@ -24,6 +24,11 @@ public class Fox extends Animal
     {
         return FOX_COUNTER;
     }
+    @Override
+    public void decrease_static_counter()
+    {
+        FOX_COUNTER -= 1;
+    }
 
     @Override
     public void action(char[][] grid_board)
@@ -33,6 +38,7 @@ public class Fox extends Animal
 
         boolean moved = false;
         int[] indexes = {1, 2, 3, 4};
+        grid_board[this.row][this.column] = 'e';
 
         for (int index : indexes)
         {
@@ -72,9 +78,11 @@ public class Fox extends Animal
             }
             if (moved)
             {
+                grid_board[this.row][this.column] = this.get_character();
                 return;
             }
         }
+        grid_board[this.row][this.column] = this.get_character();
         System.out.println(this.get_name() + " stays at current position: (" + this.row + ", " + this.column + ")");
     }
 

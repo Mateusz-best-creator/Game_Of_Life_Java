@@ -35,4 +35,9 @@ public class Sheep extends Animal
     {
         return this.default_animal_collision(grid_board, organisms, current_index);
     }
+    @Override
+    public void decrease_static_counter()
+    {
+        SHEEP_COUNTER -= 1;
+    }
 }

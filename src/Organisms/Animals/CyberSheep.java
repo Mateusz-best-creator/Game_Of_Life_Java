@@ -25,6 +25,11 @@ public class CyberSheep extends Animal
     {
         return CYBER_SHEEP_COUNTER;
     }
+    @Override
+    public void decrease_static_counter()
+    {
+        CYBER_SHEEP_COUNTER -= 1;
+    }
 
     @Override
     public void action(char[][] grid_board)
@@ -83,6 +88,19 @@ public class CyberSheep extends Animal
     @Override
     public CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
     {
-        return new CollisionResult(CollisionType.NONE, -1, -1);
+        if (this.distance_to_sosnowsky == 0)
+        {
+            this.distance_to_sosnowsky = 99;
+            int index = 0;
+            for (Organism organism : organisms)
+            {
+                if (organism.get_row() == this.row && organism.get_column() == this.column && index != current_index)
+                {
+                    grid_board[this.row][this.column] = this.get_character();
+                    return new CollisionResult(CollisionType.FIGHT, this.row, this.column, index);
+                }
+            }
+        }
+        return this.default_animal_collision(grid_board, organisms, current_index);
     }
 }

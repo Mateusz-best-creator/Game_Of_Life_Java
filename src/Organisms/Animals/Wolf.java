@@ -35,4 +35,9 @@ public class Wolf extends Animal
     {
         return this.default_animal_collision(grid_board, organisms, current_index);
     }
+    @Override
+    public void decrease_static_counter()
+    {
+        WOLF_COUNTER -= 1;
+    }
 }

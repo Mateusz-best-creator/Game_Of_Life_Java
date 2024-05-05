@@ -35,4 +35,9 @@ public class Belladonna extends Plant
     {
         return new CollisionResult(CollisionType.NONE, -1, -1);
     }
+    @Override
+    public void decrease_static_counter()
+    {
+        BELLADONNA_COUNTER -= 1;
+    }
 }

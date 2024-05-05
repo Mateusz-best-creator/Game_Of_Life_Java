@@ -36,4 +36,9 @@ public class SowThistle extends Plant
 
         return new CollisionResult(CollisionType.NONE, -1, -1);
     }
+    @Override
+    public void decrease_static_counter()
+    {
+        SOW_THISTLE_COUNTER -= 1;
+    }
 }

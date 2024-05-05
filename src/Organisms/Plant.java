@@ -21,6 +21,8 @@ public abstract class Plant extends Organism
     public abstract CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
     @Override
     public abstract int get_organism_counter();
+    @Override
+    public abstract void decrease_static_counter();
 
     public void default_plant_action()
     {

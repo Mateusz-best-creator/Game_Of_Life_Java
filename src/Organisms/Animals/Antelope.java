@@ -12,6 +12,8 @@ import java.util.Vector;
 public class Antelope extends Animal
 {
     static int ANTELOPE_COUNTER = 0;
+    static double ANTELOPE_ESCAPE_PROBABILITY = 0.5;
+    private char previous_char = 'e';
 
     public Antelope(int row, int column)
     {
@@ -23,6 +25,11 @@ public class Antelope extends Animal
     public int get_organism_counter()
     {
         return ANTELOPE_COUNTER;
+    }
+    @Override
+    public void decrease_static_counter()
+    {
+        ANTELOPE_COUNTER -= 1;
     }
 
     @Override
@@ -70,13 +77,28 @@ public class Antelope extends Animal
                 break;
         }
         System.out.println("("+ this.row + ", " + this.column + ")");
+        this.previous_char = grid_board[this.row][this.column];
         grid_board[this.row][this.column] = this.get_character();
     }
 
     @Override
     public CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
     {
-        return new CollisionResult(CollisionType.NONE, -1, -1);
+        CollisionResult result = this.default_animal_collision(grid_board, organisms, current_index);
+        if (result.getType() == CollisionType.FIGHT)
+        {
+            double rand = Math.random();
+            if (rand < ANTELOPE_ESCAPE_PROBABILITY)
+            {
+                grid_board[this.row][this.column] = this.previous_char;
+                this.row = this.previous_row;
+                this.column = this.previous_column;
+                System.out.println(this.get_name() + " escapes from a fight, it goes back to (" + this.row + ", " + this.column + ")");
+                grid_board[this.row][this.column] = this.get_character();
+                return new CollisionResult(CollisionType.NONE, this.row, this.column);
+            }
+        }
+        return result;
     }
 
 }
