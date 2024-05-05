@@ -1,6 +1,8 @@
 package Organisms.Animals;
 
 import Organisms.Animal;
+import Organisms.Enums.CollisionResult;
+import Organisms.Enums.CollisionType;
 import Organisms.Enums.OrganismType;
 import Organisms.Organism;
 
@@ -8,16 +10,28 @@ import java.util.Vector;
 
 public class CyberSheep extends Animal
 {
+    static int CYBER_SHEEP_COUNTER = 0;
+
     private double distance_to_sosnowsky;
 
     public CyberSheep(int row, int column)
     {
         super(11, 4, "cyber_sheep", 'c', row, column, "cyber_sheep.png", OrganismType.CYBER_SHEEP);
+        CYBER_SHEEP_COUNTER += 1;
+    }
+
+    @Override
+    public int get_organism_counter()
+    {
+        return CYBER_SHEEP_COUNTER;
     }
 
     @Override
     public void action(char[][] grid_board)
     {
+        this.previous_row = this.row;
+        this.previous_column = this.column;
+
         double min_distance = -1;
         int sosnowsky_row = -1, sosnowsky_col = -1;
 
@@ -67,8 +81,8 @@ public class CyberSheep extends Animal
     }
 
     @Override
-    public void collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
+    public CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
     {
-
+        return new CollisionResult(CollisionType.NONE, -1, -1);
     }
 }

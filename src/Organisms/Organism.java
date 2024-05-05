@@ -1,5 +1,7 @@
 package Organisms;
 
+import Organisms.Enums.CollisionResult;
+import Organisms.Enums.CollisionType;
 import Organisms.Enums.OrganismType;
 
 import java.awt.*;
@@ -13,11 +15,13 @@ public abstract class Organism
     private final int initiative;
     private final String name;
     private final char character;
+    private final OrganismType type;
     Image organismImage;
 
     static protected Random randomGenerator = new Random();
+
     protected int row, column;
-    private OrganismType type;
+    protected int previous_row, previous_column;
 
     public Organism(int strength, int initiative, String name, char character, int row, int column, String image_name, OrganismType type)
     {
@@ -27,13 +31,14 @@ public abstract class Organism
         this.character = character;
         this.row = row;
         this.column = column;
-        this.organismImage = Toolkit.getDefaultToolkit().getImage("/home/mateusz/IdeaProjects/PLs/src/Assets/" + image_name);
+        this.organismImage = Toolkit.getDefaultToolkit().getImage("src/Assets/" + image_name);
         this.age = 0;
         this.type = type;
     }
 
     public abstract void action(char[][] grid_board);
-    public abstract void collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
+    public abstract CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
+    public abstract int get_organism_counter();
 
     public Image get_image()
     {
@@ -78,6 +83,20 @@ public abstract class Organism
     public int get_column()
     {
         return this.column;
+    }
+
+    public int get_previous_row() { return this.previous_row; }
+
+    public int get_previous_column() { return this.previous_column; }
+
+    public void set_row(int r)
+    {
+        this.row = r;
+    }
+
+    public void set_column(int c)
+    {
+        this.column = c;
     }
 
     public OrganismType get_type()

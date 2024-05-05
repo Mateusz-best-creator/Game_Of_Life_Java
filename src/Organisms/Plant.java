@@ -1,5 +1,7 @@
 package Organisms;
 
+import Organisms.Enums.CollisionResult;
+import Organisms.Enums.CollisionType;
 import Organisms.Enums.OrganismType;
 
 import java.util.Vector;
@@ -16,7 +18,9 @@ public abstract class Plant extends Organism
     @Override
     public abstract void action(char[][] grid_board);
     @Override
-    public abstract void collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
+    public abstract CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
+    @Override
+    public abstract int get_organism_counter();
 
     public void default_plant_action()
     {

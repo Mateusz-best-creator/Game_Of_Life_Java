@@ -1,6 +1,8 @@
 package Organisms.Animals;
 
 import Organisms.Animal;
+import Organisms.Enums.CollisionResult;
+import Organisms.Enums.CollisionType;
 import Organisms.Enums.Direction;
 import Organisms.Enums.OrganismType;
 import Organisms.Organism;
@@ -9,14 +11,26 @@ import java.util.Vector;
 
 public class Antelope extends Animal
 {
+    static int ANTELOPE_COUNTER = 0;
+
     public Antelope(int row, int column)
     {
         super(4, 4, "antelope", 'a', row, column, "antelope.png", OrganismType.ANTELOPE);
+        ANTELOPE_COUNTER += 1;
+    }
+
+    @Override
+    public int get_organism_counter()
+    {
+        return ANTELOPE_COUNTER;
     }
 
     @Override
     public void action(char[][] grid_board)
     {
+        this.previous_row = this.row;
+        this.previous_column = this.column;
+
         grid_board[this.row][this.column] = 'e';
         int height = grid_board.length;
         int width = grid_board[0].length;
@@ -60,9 +74,9 @@ public class Antelope extends Animal
     }
 
     @Override
-    public void collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
+    public CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
     {
-
+        return new CollisionResult(CollisionType.NONE, -1, -1);
     }
 
 }
