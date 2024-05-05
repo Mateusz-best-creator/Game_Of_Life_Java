@@ -40,8 +40,7 @@ public class SowThistle extends Plant
     @Override
     public CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
     {
-
-        return new CollisionResult(CollisionType.NONE, -1, -1);
+        return this.default_plant_collision();
     }
     @Override
     public void decrease_static_counter()

@@ -20,6 +20,7 @@ public abstract class Organism
     Image organismImage;
 
     static protected Random randomGenerator = new Random();
+    static private final int GUARANA_STRENGTH_INCREASE = 3;
 
     protected int row, column;
     protected int previous_row, previous_column;
@@ -61,6 +62,11 @@ public abstract class Organism
     public int get_strength()
     {
         return this.strength;
+    }
+
+    public void increase_guarana_strength()
+    {
+        this.strength += GUARANA_STRENGTH_INCREASE;
     }
 
     public int get_initiative()
@@ -129,5 +135,14 @@ public abstract class Organism
     {
         System.out.println(this.get_name() + " moves from (" + this.row + ", " + this.column + ") to: (" + (this.row + 1) + ", " + this.column + ") ");
         this.row += 1;
+    }
+
+    public void eat_guarana(Organism organism)
+    {
+        if (organism.get_type() == OrganismType.GUARANA)
+        {
+            System.out.println(this.get_name() + " increase its strength after eating " + OrganismType.GUARANA.name());
+            this.increase_guarana_strength();
+        }
     }
 }

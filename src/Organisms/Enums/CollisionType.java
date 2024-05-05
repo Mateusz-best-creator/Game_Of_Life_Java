@@ -6,14 +6,17 @@ public enum CollisionType
 {
     Multiplication("Multiplication"),
     FIGHT("Fight"),
+    POISON_PLANT("PoisonPlant"), // For sosnowsky and belladonna
     NONE("None");
 
     final String name;
-    CollisionType(String n) {
+    CollisionType(String n)
+    {
         this.name = n;
     }
 
-    private String getName() {
+    private String getName()
+    {
         return this.name;
     }
 

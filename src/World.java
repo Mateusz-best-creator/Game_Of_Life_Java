@@ -131,39 +131,39 @@ public class World
                 case HUMAN:
                     this.organisms.add(new Human(random_row, random_column));
                     break;
-//                case WOLF:
-//                    this.organisms.add(new Wolf(random_row, random_column));
-//                    break;
-//                case SHEEP:
-//                    this.organisms.add(new Sheep(random_row, random_column));
-//                    break;
+                case WOLF:
+                    this.organisms.add(new Wolf(random_row, random_column));
+                    break;
+                case SHEEP:
+                    this.organisms.add(new Sheep(random_row, random_column));
+                    break;
                 case FOX:
                     this.organisms.add(new Fox(random_row, random_column));
                     break;
                 case TURTLE:
                     this.organisms.add(new Turtle(random_row, random_column));
                     break;
-//                case ANTELOPE:
-//                    this.organisms.add(new Antelope(random_row, random_column));
-//                    break;
-//                case CYBER_SHEEP:
-//                    this.organisms.add(new CyberSheep(random_row, random_column));
-//                    break;
-//                case GRASS:
-//                    this.organisms.add(new Grass(random_row, random_column));
-//                    break;
-//                case SOW_THISTLE:
-//                    this.organisms.add(new SowThistle(random_row, random_column));
-//                    break;
-//                case GUARANA:
-//                    this.organisms.add(new Guarana(random_row, random_column));
-//                    break;
-//                case BELLADONNA:
-//                    this.organisms.add(new Belladonna(random_row, random_column));
-//                    break;
-//                case SOSNOWSKY_HOGWEED:
-//                    this.organisms.add(new SosnowskyHogweed(random_row, random_column));
-//                    break;
+                case ANTELOPE:
+                    this.organisms.add(new Antelope(random_row, random_column));
+                    break;
+                case CYBER_SHEEP:
+                    this.organisms.add(new CyberSheep(random_row, random_column));
+                    break;
+                case GRASS:
+                    this.organisms.add(new Grass(random_row, random_column));
+                    break;
+                case SOW_THISTLE:
+                    this.organisms.add(new SowThistle(random_row, random_column));
+                    break;
+                case GUARANA:
+                    this.organisms.add(new Guarana(random_row, random_column));
+                    break;
+                case BELLADONNA:
+                    this.organisms.add(new Belladonna(random_row, random_column));
+                    break;
+                case SOSNOWSKY_HOGWEED:
+                    this.organisms.add(new SosnowskyHogweed(random_row, random_column));
+                    break;
                 default:
                     System.out.println("Wrong organism type: " + type.name());
                     break;
@@ -213,65 +213,12 @@ public class World
             organisms_coords_to_remove.clear();
             organism_indexes_to_remove.clear();
 
+            // Update board characters
+            this.update_board();
+
             // Draw board after changes
             this.drawBoard();
         } while (this.turn_number != 20);
-    }
-
-    // Multiply organisms after multiplication
-    private void multiply_organisms()
-    {
-        for (int index = 0; index < this.organisms_coords_to_add.size(); index++)
-        {
-            boolean added = false;
-            OrganismType type = organisms_types_to_add.get(index);
-            int currentRow = organisms_coords_to_add.get(index).get_row();
-            int currentCol = organisms_coords_to_add.get(index).get_col();
-
-            for (int j = -1; j <= 1; j++)
-            {
-                for (int k = -1; k <= 1; k++)
-                {
-
-                    int new_row = currentRow + j;
-                    int new_column = currentCol + k;
-
-                    if (new_row >= 0 && new_row < this.grid_board.length
-                        && new_column >= 0 && new_column < this.grid_board[0].length
-                        && this.grid_board[new_row][new_column] == 'e')
-                    {
-                        System.out.println("Creating new " + type.name() + " at (" + new_row + ", " + new_column + ")");
-                        this.add_organism(type, 1, new_row, new_column);
-                        added = true;
-                        break;
-                    }
-                }
-                if (added)
-                    break;
-            }
-        }
-    }
-
-    // Remove organisms after collisions
-    private void remove_organisms()
-    {
-        Comparator<Integer> comp = Collections.reverseOrder();
-        this.organism_indexes_to_remove.sort(comp);
-
-        for (int i = 0; i < this.organism_indexes_to_remove.size(); i++)
-        {
-            int index = this.organism_indexes_to_remove.get(i);
-            int row = this.organisms.get(index).get_row();
-            int col = this.organisms.get(index).get_column();
-            grid_board[row][col] = 'e';
-            System.out.println("Removing " + this.organisms.get(index).get_type() + " at (" + row + ", " + col + ")");
-
-            //Decrement static counter
-            this.organisms.get(index).decrease_static_counter();
-            // Remove organism from vector that has index i
-            this.organisms.remove(index);
-        }
-
     }
 
     private void handle_action(Organism organism)
@@ -280,7 +227,7 @@ public class World
         switch (action_result.get_type())
         {
             case KILLING:
-                Vector<Pair<Integer, Integer>> coordinates = action_result.get_coords_to_remove();
+                Vector<Pair<Integer, Integer>> coordinates = action_result.get_coordinates();
                 this.organisms_coords_to_remove.addAll(coordinates);
                 for (Pair<Integer, Integer> integerIntegerPair : organisms_coords_to_remove)
                 {
@@ -298,7 +245,9 @@ public class World
                 }
                 break;
             case SOW:
-                this.organisms_coords_to_add.addAll(action_result.get_coords_to_remove());
+                int r = action_result.get_row();
+                int c = action_result.get_col();
+                this.organisms_coords_to_add.add(new Pair<>(r, c));
                 this.organisms_types_to_add.add(organism.get_type());
                 break;
             case MOVE:
@@ -321,16 +270,96 @@ public class World
         switch (collision_type.getType())
         {
             case FIGHT:
+                int index_to_remove = collision_type.get_index();
+                if (this.organisms.get(index_to_remove).get_type() == OrganismType.GUARANA)
+                {
+                    System.out.println(organism.get_name() + " at (" + organism.get_row() + ", " + organism.get_column() + ") gets +3 to its strength...");
+                    this.organisms.get(index_to_remove).increase_guarana_strength();
+                }
                 organisms_coords_to_remove.add(new Pair<>(row, col));
-                organism_indexes_to_remove.add(collision_type.get_index());
+                organism_indexes_to_remove.add(index_to_remove);
                 break;
             case Multiplication:
                 organisms_coords_to_add.add(new Pair<>(row, col));
                 organisms_types_to_add.add(organism.get_type());
                 break;
+            case POISON_PLANT:
+                for (int index : collision_type.get_indexes())
+                    organism_indexes_to_remove.add(index);
+                break;
             // Including NULL return here
             default:
                 break;
         }
+    }
+
+    // Multiply organisms after multiplication
+    private void multiply_organisms()
+    {
+        for (int index = 0; index < this.organisms_coords_to_add.size(); index++)
+        {
+            boolean added = false;
+            OrganismType type = organisms_types_to_add.get(index);
+            int currentRow = organisms_coords_to_add.get(index).get_row();
+            int currentCol = organisms_coords_to_add.get(index).get_col();
+
+            for (int j = -1; j <= 1; j++)
+            {
+                for (int k = -1; k <= 1; k++)
+                {
+
+                    int new_row = currentRow + j;
+                    int new_column = currentCol + k;
+
+                    if (new_row >= 0 && new_row < this.grid_board.length
+                            && new_column >= 0 && new_column < this.grid_board[0].length
+                            && this.grid_board[new_row][new_column] == 'e')
+                    {
+                        System.out.println("Creating new " + type.name() + " at (" + new_row + ", " + new_column + ")");
+                        this.add_organism(type, 1, new_row, new_column);
+                        added = true;
+                        break;
+                    }
+                }
+                if (added)
+                    break;
+            }
+        }
+    }
+
+    // Remove organisms after collisions
+    private void remove_organisms()
+    {
+        if (this.organisms.isEmpty())
+            return;
+
+        Comparator<Integer> comp = Collections.reverseOrder();
+        this.organism_indexes_to_remove.sort(comp);
+        // Transform the Vector to remove duplicates and maintain sorting order
+        Set<Integer> set = new TreeSet<>(Collections.reverseOrder());
+        set.addAll(organism_indexes_to_remove);
+        organism_indexes_to_remove.clear();
+        organism_indexes_to_remove.addAll(set);
+
+        for (int index : this.organism_indexes_to_remove)
+        {
+            int row = this.organisms.get(index).get_row();
+            int col = this.organisms.get(index).get_column();
+            System.out.println("Removing " + this.organisms.get(index).get_type() + " at (" + row + ", " + col + ")");
+
+            //Decrement static counter
+            this.organisms.get(index).decrease_static_counter();
+            // Remove organism from vector that has index i
+            this.organisms.remove(index);
+        }
+    }
+
+    private void update_board()
+    {
+        for (int i = 0; i < board_width; i++)
+            for (int j = 0; j < board_height; j++)
+                this.grid_board[i][j] = 'e';
+        for (Organism o : this.organisms)
+            this.grid_board[o.get_row()][o.get_column()] = o.get_character();
     }
 }

@@ -54,7 +54,7 @@ public class SosnowskyHogweed extends Plant
         {
             return new ActionResult(ActionType.KILLING, coords_to_remove);
         }
-        System.out.println(this.get_name() + " at (" + this.row + ", " + this.column + " will not kill...");
+        System.out.println(this.get_name() + " at (" + this.row + ", " + this.column + ") will not kill...");
         return new ActionResult(ActionType.STAY);
     }
 
@@ -66,8 +66,19 @@ public class SosnowskyHogweed extends Plant
     @Override
     public CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
     {
-
-        return new CollisionResult(CollisionType.NONE, -1, -1);
+        int index = 0;
+        for (Organism o : organisms)
+        {
+            if (o.get_row() == this.row && o.get_column() == this.column && index != current_index && o.get_type() != OrganismType.CYBER_SHEEP)
+            {
+                System.out.println(this.get_name() + " eat " + o.get_name() + " and " + o.get_name()
+                        + " eat " + this.get_name() + " at (" + this.row + ", " + this.column + ")");
+                int[] indexes = {current_index, index};
+                return new CollisionResult(CollisionType.POISON_PLANT, indexes);
+            }
+            index += 1;
+        }
+        return new CollisionResult(CollisionType.NONE);
     }
     @Override
     public void decrease_static_counter()

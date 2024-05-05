@@ -1,6 +1,6 @@
 package Organisms.Enums;
 
-import java.util.Objects;
+import java.util.Vector;
 
 public class CollisionResult
 {
@@ -9,12 +9,21 @@ public class CollisionResult
     private int col;
     private int organism_index = -1;
 
+    // Special for suicide type
+    private int[] organism_indexes = new int[2];
+
     public CollisionResult(CollisionType type, int row, int col, int index)
     {
         this.collision_type = type;
         this.row = row;
         this.col = col;
         this.organism_index = index;
+    }
+
+    public CollisionResult(CollisionType type, int[] indexes)
+    {
+        this.collision_type = type;
+        this.organism_indexes = indexes;
     }
 
     public CollisionResult(CollisionType type, int row, int col)
@@ -47,5 +56,10 @@ public class CollisionResult
     public int get_index()
     {
         return this.organism_index;
+    }
+
+    public int[] get_indexes()
+    {
+        return this.organism_indexes;
     }
 }

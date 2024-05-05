@@ -17,7 +17,7 @@ public class Human extends Animal implements KeyboardPress
 
     public Human(int row, int column)
     {
-        super(50, 4, "Human", 'H', row, column, "human.png", OrganismType.HUMAN);
+        super(5, 4, "Human", 'H', row, column, "human.png", OrganismType.HUMAN);
         HUMAN_COUNTER += 1;
     }
 
@@ -45,6 +45,21 @@ public class Human extends Animal implements KeyboardPress
     @Override
     public CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
     {
+        int index = 0;
+        for (Organism o : organisms)
+        {
+            if (o.get_row() == this.row && o.get_column() == this.column && index != current_index)
+            {
+                if (o.get_type() == OrganismType.SOSNOWSKY_HOGWEED || o.get_type() == OrganismType.BELLADONNA)
+                {
+                    int[] indexes = {current_index, index};
+                    System.out.println(this.get_name() + " eat " + o.get_name() + " and " + o.get_name()
+                            + " eat " + this.get_name() + " at (" + this.row + ", " + this.column + ")");
+                    return new CollisionResult(CollisionType.POISON_PLANT, indexes);
+                }
+            }
+            index += 1;
+        }
         return this.default_animal_collision(grid_board, organisms, current_index);
     }
 
