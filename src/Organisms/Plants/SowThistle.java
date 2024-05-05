@@ -1,16 +1,16 @@
 package Organisms.Plants;
 
-import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Enums.OrganismType;
+import Organisms.Enums.*;
 import Organisms.Organism;
 import Organisms.Plant;
 
+import javax.swing.*;
 import java.util.Vector;
 
 public class SowThistle extends Plant
 {
     static int SOW_THISTLE_COUNTER = 0;
+    static int SOW_THISTLE_ATTEMPTS = 3;
 
     public SowThistle(int row, int column)
     {
@@ -25,9 +25,16 @@ public class SowThistle extends Plant
     }
 
     @Override
-    public void action(char[][] grid_board)
+    public ActionResult action(char[][] grid_board)
     {
-
+        ActionResult r = new ActionResult(ActionType.STAY);
+        for (int i = 0; i < SOW_THISTLE_ATTEMPTS; i++)
+        {
+            r = this.default_plant_action();
+            if (r.get_type() == ActionType.SOW)
+                break;
+        }
+        return r;
     }
 
     @Override

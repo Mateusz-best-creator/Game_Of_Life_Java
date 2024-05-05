@@ -1,8 +1,6 @@
 package Organisms.Plants;
 
-import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Enums.OrganismType;
+import Organisms.Enums.*;
 import Organisms.Organism;
 import Organisms.Plant;
 
@@ -25,9 +23,9 @@ public class Belladonna extends Plant
     }
 
     @Override
-    public void action(char[][] grid_board)
+    public ActionResult action(char[][] grid_board)
     {
-
+        return this.default_plant_action();
     }
 
     @Override

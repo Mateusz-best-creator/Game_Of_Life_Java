@@ -1,10 +1,7 @@
 package Organisms.Animals;
 
 import Organisms.Animal;
-import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Enums.Direction;
-import Organisms.Enums.OrganismType;
+import Organisms.Enums.*;
 import Organisms.Organism;
 
 import java.util.Vector;
@@ -31,7 +28,7 @@ public class Fox extends Animal
     }
 
     @Override
-    public void action(char[][] grid_board)
+    public ActionResult action(char[][] grid_board)
     {
         this.previous_row = this.row;
         this.previous_column = this.column;
@@ -72,18 +69,19 @@ public class Fox extends Animal
             {
                 if (this.fox_can_go(grid_board[this.row + 1][this.column]))
                 {
-                    this.organisms_move_bottom();
+                    this.organism_move_bottom();
                     moved = true;
                 }
             }
             if (moved)
             {
                 grid_board[this.row][this.column] = this.get_character();
-                return;
+                return new ActionResult(ActionType.MOVE);
             }
         }
         grid_board[this.row][this.column] = this.get_character();
         System.out.println(this.get_name() + " stays at current position: (" + this.row + ", " + this.column + ")");
+        return new ActionResult(ActionType.MOVE);
     }
 
     @Override

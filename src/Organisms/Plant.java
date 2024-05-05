@@ -1,9 +1,8 @@
 package Organisms;
 
-import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Enums.OrganismType;
+import Organisms.Enums.*;
 
+import javax.swing.*;
 import java.util.Vector;
 
 public abstract class Plant extends Organism
@@ -16,7 +15,7 @@ public abstract class Plant extends Organism
     }
 
     @Override
-    public abstract void action(char[][] grid_board);
+    public abstract ActionResult action(char[][] grid_board);
     @Override
     public abstract CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
     @Override
@@ -24,16 +23,16 @@ public abstract class Plant extends Organism
     @Override
     public abstract void decrease_static_counter();
 
-    public void default_plant_action()
+    public ActionResult default_plant_action()
     {
-        int rand = randomGenerator.nextInt(10) + 1;
-        if (rand < probability * 10)
+        double rand = Math.random();
+        if (rand >= probability || this.get_organism_counter() > MAX_ANIMAL_AMOUNT)
         {
-
+            return new ActionResult(ActionType.STAY);
         }
         else
         {
-
+            return new ActionResult(ActionType.SOW, this.row, this.column);
         }
     }
 }

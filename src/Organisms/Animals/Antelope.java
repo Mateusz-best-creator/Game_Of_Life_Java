@@ -1,10 +1,7 @@
 package Organisms.Animals;
 
 import Organisms.Animal;
-import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Enums.Direction;
-import Organisms.Enums.OrganismType;
+import Organisms.Enums.*;
 import Organisms.Organism;
 
 import java.util.Vector;
@@ -33,7 +30,7 @@ public class Antelope extends Animal
     }
 
     @Override
-    public void action(char[][] grid_board)
+    public ActionResult action(char[][] grid_board)
     {
         this.previous_row = this.row;
         this.previous_column = this.column;
@@ -79,6 +76,7 @@ public class Antelope extends Animal
         System.out.println("("+ this.row + ", " + this.column + ")");
         this.previous_char = grid_board[this.row][this.column];
         grid_board[this.row][this.column] = this.get_character();
+        return new ActionResult(ActionType.MOVE);
     }
 
     @Override
@@ -95,7 +93,7 @@ public class Antelope extends Animal
                 this.column = this.previous_column;
                 System.out.println(this.get_name() + " escapes from a fight, it goes back to (" + this.row + ", " + this.column + ")");
                 grid_board[this.row][this.column] = this.get_character();
-                return new CollisionResult(CollisionType.NONE, this.row, this.column);
+                return new CollisionResult(CollisionType.NONE);
             }
         }
         return result;

@@ -1,9 +1,7 @@
 package Organisms.Animals;
 
 import Organisms.Animal;
-import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Enums.OrganismType;
+import Organisms.Enums.*;
 import Organisms.Organism;
 
 import java.util.Vector;
@@ -32,7 +30,7 @@ public class CyberSheep extends Animal
     }
 
     @Override
-    public void action(char[][] grid_board)
+    public ActionResult action(char[][] grid_board)
     {
         this.previous_row = this.row;
         this.previous_column = this.column;
@@ -63,7 +61,7 @@ public class CyberSheep extends Animal
         {
             System.out.println("No sosnowsky hogweed on the board, cyber_sheep behaves like normal sheep...");
             this.default_action_animal(grid_board);
-            return;
+            return new ActionResult(ActionType.MOVE);
         }
 
         if (sosnowsky_row < this.row && this.row > 0)
@@ -72,7 +70,7 @@ public class CyberSheep extends Animal
         }
         else if (sosnowsky_row > this.row && this.row < grid_board.length - 1)
         {
-            this.organisms_move_bottom();
+            this.organism_move_bottom();
         }
         else if (sosnowsky_col < this.column && this.column > 0)
         {
@@ -83,6 +81,7 @@ public class CyberSheep extends Animal
             this.organism_move_right();
         }
         this.distance_to_sosnowsky = Math.pow(Math.pow(this.row - sosnowsky_row, 2) + Math.pow(this.column - sosnowsky_col, 2), 0.5);
+        return new ActionResult(ActionType.MOVE);
     }
 
     @Override
@@ -99,6 +98,7 @@ public class CyberSheep extends Animal
                     grid_board[this.row][this.column] = this.get_character();
                     return new CollisionResult(CollisionType.FIGHT, this.row, this.column, index);
                 }
+                index += 1;
             }
         }
         return this.default_animal_collision(grid_board, organisms, current_index);

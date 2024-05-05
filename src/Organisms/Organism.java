@@ -1,9 +1,6 @@
 package Organisms;
 
-import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Enums.Direction;
-import Organisms.Enums.OrganismType;
+import Organisms.Enums.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +23,7 @@ public abstract class Organism
 
     protected int row, column;
     protected int previous_row, previous_column;
+    static protected final int MAX_ANIMAL_AMOUNT = 5;
 
     public Organism(int strength, int initiative, String name, char character, int row, int column, String image_name, OrganismType type)
     {
@@ -40,7 +38,7 @@ public abstract class Organism
         this.type = type;
     }
 
-    public abstract void action(char[][] grid_board);
+    public abstract ActionResult action(char[][] grid_board);
     public abstract CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
     public abstract int get_organism_counter();
     public abstract void decrease_static_counter();
@@ -127,7 +125,7 @@ public abstract class Organism
         this.column += 1;
     }
 
-    public void organisms_move_bottom()
+    public void organism_move_bottom()
     {
         System.out.println(this.get_name() + " moves from (" + this.row + ", " + this.column + ") to: (" + (this.row + 1) + ", " + this.column + ") ");
         this.row += 1;

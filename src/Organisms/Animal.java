@@ -1,9 +1,6 @@
 package Organisms;
 
-import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Enums.Direction;
-import Organisms.Enums.OrganismType;
+import Organisms.Enums.*;
 
 import java.util.Objects;
 import java.util.Vector;
@@ -18,7 +15,7 @@ public abstract class Animal extends Organism
     }
 
     @Override
-    public abstract void action(char[][] grid_board);
+    public abstract ActionResult action(char[][] grid_board);
     @Override
     public abstract CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index);
     @Override
@@ -26,7 +23,7 @@ public abstract class Animal extends Organism
     @Override
     public abstract void decrease_static_counter();
 
-    protected void default_action_animal(char[][] grid_board)
+    protected ActionResult default_action_animal(char[][] grid_board)
     {
         this.previous_row = this.row;
         this.previous_column = this.column;
@@ -62,7 +59,7 @@ public abstract class Animal extends Organism
                 this.organism_move_right();
                 break;
             case BOTTOM:
-                this.organisms_move_bottom();
+                this.organism_move_bottom();
                 break;
             default:
                 System.out.println("Invalid direction at default_animal_action(...)\n");
@@ -70,6 +67,7 @@ public abstract class Animal extends Organism
         }
         assert(this.row > 0 && this.row < board_height && this.column > 0 && this.column < board_width);
         grid_board[this.row][this.column] = this.get_character();
+        return new ActionResult(ActionType.MOVE);
     }
 
     protected CollisionResult default_animal_collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
@@ -80,6 +78,7 @@ public abstract class Animal extends Organism
             if (organism.row == this.row && organism.column == this.column && index != current_index)
             {
                 // Multiplication case
+
                 if (this.get_type() == organism.get_type())
                 {
                     System.out.println(this.get_name() + " multiplication at: (" + this.get_row() + ", " + this.get_column() + ")");
@@ -89,6 +88,12 @@ public abstract class Animal extends Organism
                     this.column = this.previous_column;
                     System.out.println(this.get_type() + " is going back to: (" + this.row + ", " + this.column + ")");
                     grid_board[this.row][this.column] = this.get_character();
+
+                    if (this.get_organism_counter() > MAX_ANIMAL_AMOUNT)
+                    {
+                        System.out.println("Cannot create more "+ this.get_name() + " we already have " + this.get_organism_counter() + " of it...");
+                        return new CollisionResult(CollisionType.NONE);
+                    }
                     return new CollisionResult(CollisionType.Multiplication, current_row, current_col);
                 }
                 // Turtle reflection case
@@ -98,7 +103,7 @@ public abstract class Animal extends Organism
                     this.row = this.previous_row;
                     this.column = this.previous_column;
                     grid_board[this.row][this.column] = this.get_character();
-                    return new CollisionResult(CollisionType.NONE, this.row, this.column);
+                    return new CollisionResult(CollisionType.NONE);
                 }
                 // Fight case
                 else
@@ -121,6 +126,6 @@ public abstract class Animal extends Organism
             }
             index += 1;
         }
-        return new CollisionResult(CollisionType.NONE, this.row, this.column);
+        return new CollisionResult(CollisionType.NONE);
     }
 }

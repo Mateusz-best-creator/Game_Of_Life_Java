@@ -5,10 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import Organisms.Animal;
-import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
-import Organisms.Enums.Direction;
-import Organisms.Enums.OrganismType;
+import Organisms.Enums.*;
 import Organisms.Organism;
 
 import java.util.Vector;
@@ -36,12 +33,13 @@ public class Human extends Animal implements KeyboardPress
     }
 
     @Override
-    public void action(char[][] grid_board)
+    public ActionResult action(char[][] grid_board)
     {
         this.previous_row = this.row;
         this.previous_column = this.column;
         board_height = grid_board.length;
         board_width = grid_board[0].length;
+        return new ActionResult(ActionType.MOVE);
     }
 
     @Override
@@ -50,12 +48,13 @@ public class Human extends Animal implements KeyboardPress
         return this.default_animal_collision(grid_board, organisms, current_index);
     }
 
-    private boolean human_go(Direction dir)
+    private boolean human_go(Direction dir, char[][] board)
     {
         assert(board_width != -1 && board_height != -1);
         this.previous_row = this.row;
         this.previous_column = this.column;
         boolean moved = false;
+        board[this.row][this.column] = 'e';
 
         if (dir == Direction.LEFT && this.column > 0)
         {
@@ -74,19 +73,16 @@ public class Human extends Animal implements KeyboardPress
         }
         else if (dir == Direction.BOTTOM && this.row < board_height - 1)
         {
-            this.organisms_move_bottom();
+            this.organism_move_bottom();
             moved = true;
         }
         if (moved)
-        {
-            System.out.println(this.get_name() + " goes from (" + this.previous_row + ", " + this.previous_column + ") to "
-            + "(" + this.row + ", " + this.column + ")");
-        }
+            board[this.row][this.column] = this.get_character();
         return moved;
     }
 
     @Override
-    public void handleKeyboardInput(JFrame frame)
+    public void handleKeyboardInput(JFrame frame, char[][] board)
     {
         Object lock = new Object();
         frame.addKeyListener(new KeyListener() {
@@ -112,7 +108,7 @@ public class Human extends Animal implements KeyboardPress
                     }
                     if (direction != null)
                     {
-                        keyPressed = human_go(direction);
+                        keyPressed = human_go(direction, board);
                     }
                     if (keyPressed) {
                         synchronized (lock) {

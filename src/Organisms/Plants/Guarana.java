@@ -1,5 +1,6 @@
 package Organisms.Plants;
 
+import Organisms.Enums.ActionResult;
 import Organisms.Enums.CollisionResult;
 import Organisms.Enums.CollisionType;
 import Organisms.Enums.OrganismType;
@@ -25,9 +26,9 @@ public class Guarana extends Plant
     }
 
     @Override
-    public void action(char[][] grid_board)
+    public ActionResult action(char[][] grid_board)
     {
-
+        return this.default_plant_action();
     }
 
     @Override

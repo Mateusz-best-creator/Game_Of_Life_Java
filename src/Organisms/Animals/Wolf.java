@@ -1,6 +1,7 @@
 package Organisms.Animals;
 
 import Organisms.Animal;
+import Organisms.Enums.ActionResult;
 import Organisms.Enums.CollisionResult;
 import Organisms.Enums.CollisionType;
 import Organisms.Enums.OrganismType;
@@ -25,9 +26,9 @@ public class Wolf extends Animal
     }
 
     @Override
-    public void action(char[][] grid_board)
+    public ActionResult action(char[][] grid_board)
     {
-        this.default_action_animal(grid_board);
+        return this.default_action_animal(grid_board);
     }
 
     @Override

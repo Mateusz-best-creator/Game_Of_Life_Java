@@ -4,5 +4,5 @@ import javax.swing.*;
 
 public interface KeyboardPress
 {
-    void handleKeyboardInput(JFrame frame);
+    void handleKeyboardInput(JFrame frame, char[][] board);
 }
