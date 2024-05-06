@@ -15,7 +15,7 @@ public enum OrganismType
     GUARANA('U'),
     SOSNOWSKY_HOGWEED('O');
 
-    private char character;
+    private final char character;
 
     OrganismType(char ch)
     {
@@ -39,4 +39,5 @@ public enum OrganismType
         // Handle case where character doesn't match any enum constant
         throw new IllegalArgumentException("No enum constant with character " + ch);
     }
+
 }

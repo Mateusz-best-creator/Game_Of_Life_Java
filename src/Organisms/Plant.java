@@ -30,8 +30,6 @@ public abstract class Plant extends Organism
         {
             if  (this.get_organism_counter() > MAX_ANIMAL_AMOUNT)
                 System.out.println("Cant create another " + this.get_name() + " we already have " + this.get_organism_counter() + " of them...");
-            else
-                System.out.println(this.get_name() + " at (" + this.row + ", " + this.column + ") will not sow...");
             return new ActionResult(ActionType.STAY);
         }
         else

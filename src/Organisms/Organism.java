@@ -2,18 +2,15 @@ package Organisms;
 
 import Organisms.Enums.*;
 
-import javax.swing.*;
 import java.awt.*;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Random;
 import java.util.Vector;
 
 public abstract class Organism
 {
-    private int strength, age;
-    private final int initiative;
+    private int strength;
+    private int initiative;
     private final String name;
     private final char character;
     private final OrganismType type;
@@ -22,9 +19,10 @@ public abstract class Organism
     static protected Random randomGenerator = new Random();
     static private final int GUARANA_STRENGTH_INCREASE = 3;
 
-    protected int row, column;
+    protected int row, column, age;
     protected int previous_row, previous_column;
     static protected final int MAX_ANIMAL_AMOUNT = 5;
+    static protected int human_normal_strength;
 
     public Organism(int strength, int initiative, String name, char character, int row, int column, String image_name, OrganismType type)
     {
@@ -67,6 +65,8 @@ public abstract class Organism
     public void increase_guarana_strength()
     {
         this.strength += GUARANA_STRENGTH_INCREASE;
+        if (this.type == OrganismType.HUMAN)
+            human_normal_strength += GUARANA_STRENGTH_INCREASE;
     }
 
     public int get_initiative()
@@ -82,6 +82,11 @@ public abstract class Organism
     public int get_age()
     {
         return this.age;
+    }
+
+    public void set_age(int value)
+    {
+        this.age = value;
     }
 
     public int get_row()
@@ -107,6 +112,9 @@ public abstract class Organism
     {
         this.column = c;
     }
+
+    public void set_strength(int s) { this.strength = s; }
+    public void set_initiative(int i) { this.initiative = i; }
 
     public OrganismType get_type()
     {
@@ -135,14 +143,5 @@ public abstract class Organism
     {
         System.out.println(this.get_name() + " moves from (" + this.row + ", " + this.column + ") to: (" + (this.row + 1) + ", " + this.column + ") ");
         this.row += 1;
-    }
-
-    public void eat_guarana(Organism organism)
-    {
-        if (organism.get_type() == OrganismType.GUARANA)
-        {
-            System.out.println(this.get_name() + " increase its strength after eating " + OrganismType.GUARANA.name());
-            this.increase_guarana_strength();
-        }
     }
 }

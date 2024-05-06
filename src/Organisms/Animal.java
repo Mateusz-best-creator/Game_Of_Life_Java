@@ -78,7 +78,6 @@ public abstract class Animal extends Organism
             if (organism.row == this.row && organism.column == this.column && index != current_index)
             {
                 // Multiplication case
-
                 if (this.get_type() == organism.get_type())
                 {
                     System.out.println(this.get_name() + " multiplication at: (" + this.get_row() + ", " + this.get_column() + ")");

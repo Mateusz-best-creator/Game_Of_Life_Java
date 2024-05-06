@@ -1,6 +1,10 @@
 
 import javax.swing.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 import Organisms.Animals.*;
 import Organisms.Enums.*;
@@ -20,6 +24,7 @@ public class World
     private final Vector<OrganismType> organisms_types_to_add = new Vector<>();
     private final Vector<Integer> organism_indexes_to_remove = new Vector<>();
 
+    static private final String FILENAME = "src/Filenames/organisms.txt";
     Vector<Organism> organisms;
     private char[][] grid_board;
     Random rand = new Random();
@@ -47,6 +52,7 @@ public class World
 
         this.organisms = new Vector<>();
         this.initialize_organisms();
+        this.drawBoard();
     }
 
     private void drawBoard()
@@ -216,6 +222,9 @@ public class World
             // Update board characters
             this.update_board();
 
+            this.save_to_file();
+//            this.read_from_file();
+
             // Draw board after changes
             this.drawBoard();
         } while (this.turn_number != 20);
@@ -274,7 +283,7 @@ public class World
                 if (this.organisms.get(index_to_remove).get_type() == OrganismType.GUARANA)
                 {
                     System.out.println(organism.get_name() + " at (" + organism.get_row() + ", " + organism.get_column() + ") gets +3 to its strength...");
-                    this.organisms.get(index_to_remove).increase_guarana_strength();
+                    organism.increase_guarana_strength();
                 }
                 organisms_coords_to_remove.add(new Pair<>(row, col));
                 organism_indexes_to_remove.add(index_to_remove);
@@ -361,5 +370,91 @@ public class World
                 this.grid_board[i][j] = 'e';
         for (Organism o : this.organisms)
             this.grid_board[o.get_row()][o.get_column()] = o.get_character();
+    }
+
+    private void save_to_file()
+    {
+        try (FileWriter writer = new FileWriter(FILENAME))
+        {
+            writer.write(board_height + " " + board_width + "\n");
+            for (Organism o : this.organisms)
+            {
+                if (o.get_type() == OrganismType.HUMAN)
+                {
+                    Human temp_human = new Human(o);
+                    String msg = temp_human.string_check_ability();
+                    int ability_counter = Human.get_ability_local_counter();
+
+                    writer.write(o.get_character() + " " + o.get_initiative() + " " + o.get_name() + " " + o.get_row() + " "
+                            + o.get_column() + " " + o.get_strength() + " " + o.get_initiative() + " "
+                            + msg + " " + ability_counter + "\n");
+                }
+                else
+                {
+                    writer.write(o.get_character() + " " + o.get_initiative() + " " + o.get_name() + " " + o.get_row() + " "
+                            + o.get_column() + " " + o.get_strength() + " " + o.get_initiative() + "\n");
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            // Handle any potential I/O errors
+            e.printStackTrace();
+        }
+    }
+
+    public void read_from_file()
+    {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME))) {
+            String line;
+            // Read the first line (special) separately
+            if ((line = reader.readLine()) != null)
+            {
+                String[] split_fragments = line.split(" ");
+                this.board_width = Integer.parseInt(split_fragments[0]);
+                this.board_height = Integer.parseInt(split_fragments[1]);
+                this.image_height = this.screen_height / this.board_height;
+                this.image_width = this.screen_width / this.board_width;
+            }
+            this.organisms.clear();
+            // Loop through the rest of the file
+            while ((line = reader.readLine()) != null)
+            {
+                String[] split_fragments = line.split(" ");
+                OrganismType type = OrganismType.fromChar(split_fragments[0].charAt(0));
+                int age = Integer.parseInt(split_fragments[1]);
+                int row = Integer.parseInt(split_fragments[2]);
+                int column = Integer.parseInt(split_fragments[3]);
+                int strength = Integer.parseInt(split_fragments[4]);
+                int initiative = Integer.parseInt(split_fragments[5]);
+
+                if (type == OrganismType.HUMAN)
+                {
+                    boolean ability_activated = false;
+                    String bool_result = split_fragments[6];
+                    if (Objects.equals(bool_result, "YES"))
+                        ability_activated = true;
+                    int ability_counter_from_file = Integer.parseInt(split_fragments[7]);
+                    this.organisms.add(new Human(row, column, age, ability_activated, ability_counter_from_file));
+                }
+                else
+                {
+                    this.add_organism(type, 1, row, column);
+                }
+                int last_index = this.organisms.size() - 1;
+                this.organisms.get(last_index).set_age(age);
+                this.organisms.get(last_index).set_strength(strength);
+                this.organisms.get(last_index).set_initiative(initiative);
+            }
+            // Sort all organisms
+            this.sort_organisms();
+            // Update board characters
+            this.update_board();
+        }
+        catch (IOException e)
+        {
+            // Handle any potential I/O errors
+            e.printStackTrace();
+        }
     }
 }

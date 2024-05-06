@@ -81,26 +81,13 @@ public class CyberSheep extends Animal
             this.organism_move_right();
         }
         this.distance_to_sosnowsky = Math.pow(Math.pow(this.row - sosnowsky_row, 2) + Math.pow(this.column - sosnowsky_col, 2), 0.5);
+        grid_board[this.row][this.column] = this.get_character();
         return new ActionResult(ActionType.MOVE);
     }
 
     @Override
     public CollisionResult collision(char[][] grid_board, Vector<Organism> organisms, int current_index)
     {
-        if (this.distance_to_sosnowsky == 0)
-        {
-            this.distance_to_sosnowsky = 99;
-            int index = 0;
-            for (Organism organism : organisms)
-            {
-                if (organism.get_row() == this.row && organism.get_column() == this.column && index != current_index)
-                {
-                    grid_board[this.row][this.column] = this.get_character();
-                    return new CollisionResult(CollisionType.FIGHT, this.row, this.column, index);
-                }
-                index += 1;
-            }
-        }
         return this.default_animal_collision(grid_board, organisms, current_index);
     }
 }
