@@ -10,8 +10,6 @@ public class CyberSheep extends Animal
 {
     static int CYBER_SHEEP_COUNTER = 0;
 
-    private double distance_to_sosnowsky;
-
     public CyberSheep(int row, int column)
     {
         super(11, 4, "cyber_sheep", 'c', row, column, "cyber_sheep.png", OrganismType.CYBER_SHEEP);
@@ -64,7 +62,7 @@ public class CyberSheep extends Animal
             return new ActionResult(ActionType.MOVE);
         }
 
-        if (sosnowsky_row < this.row && this.row > 0)
+        if (sosnowsky_row < this.row)
         {
             this.organism_move_top();
         }
@@ -72,7 +70,7 @@ public class CyberSheep extends Animal
         {
             this.organism_move_bottom();
         }
-        else if (sosnowsky_col < this.column && this.column > 0)
+        else if (sosnowsky_col < this.column)
         {
             this.organism_move_left();
         }
@@ -80,7 +78,7 @@ public class CyberSheep extends Animal
         {
             this.organism_move_right();
         }
-        this.distance_to_sosnowsky = Math.pow(Math.pow(this.row - sosnowsky_row, 2) + Math.pow(this.column - sosnowsky_col, 2), 0.5);
+//        double distance_to_sosnowsky = Math.pow(Math.pow(this.row - sosnowsky_row, 2) + Math.pow(this.column - sosnowsky_col, 2), 0.5);
         grid_board[this.row][this.column] = this.get_character();
         return new ActionResult(ActionType.MOVE);
     }

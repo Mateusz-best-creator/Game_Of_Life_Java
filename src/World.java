@@ -1,5 +1,7 @@
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -189,8 +191,28 @@ public class World
         // sort organisms
         this.sort_organisms();
 
-        do
+        boolean playing = true;
+
+        while (playing)
         {
+            // get keyboard press and wait until it is p or s or l
+            WorldAction worldAction = this.get_keyboard_key(this.frame);
+            if (worldAction == WorldAction.SAVE_TO_FILE)
+            {
+                this.save_to_file();
+                continue;
+            }
+            else if (worldAction == WorldAction.READ_FROM_FILE)
+            {
+                this.read_from_file();
+                continue;
+            }
+            else if (worldAction == WorldAction.QUIT)
+            {
+                playing = false;
+                continue;
+            }
+
             System.out.println("\n###\tTurn " + this.turn_number + "\t###\n");
             int organism_index = 0;
 
@@ -221,13 +243,10 @@ public class World
 
             // Update board characters
             this.update_board();
-
-            this.save_to_file();
-//            this.read_from_file();
-
             // Draw board after changes
             this.drawBoard();
-        } while (this.turn_number != 20);
+        }
+        this.frame.dispose();
     }
 
     private void handle_action(Organism organism)
@@ -456,5 +475,74 @@ public class World
             // Handle any potential I/O errors
             e.printStackTrace();
         }
+    }
+
+    private WorldAction get_keyboard_key(JFrame frame)
+    {
+        final char[] character = new char[1];
+        Object lock = new Object();
+        frame.addKeyListener(new KeyListener() {
+            boolean pressedKey = false;
+
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
+                int keyCode = e.getKeyCode();
+                if (!pressedKey)
+                {
+                    if (keyCode == KeyEvent.VK_P)
+                    {
+                        System.out.println("Going to the next turn...");
+                        pressedKey = true;
+                        character[0] = 'p';
+                    }
+                    else if (keyCode == KeyEvent.VK_S)
+                    {
+                        System.out.println("Saving state of the game to file...");
+                        pressedKey = true;
+                        character[0] = 's';
+                    }
+                    else if (keyCode == KeyEvent.VK_R)
+                    {
+                        System.out.println("Reading state of the game from file...");
+                        pressedKey = true;
+                        character[0] = 'r';
+                    }
+                    else if (keyCode == KeyEvent.VK_Q)
+                    {
+                        System.out.println("Bye...");
+                        pressedKey = true;
+                        character[0] = 'q';
+                    }
+                    if (pressedKey)
+                    {
+                        synchronized (lock)
+                        {
+                            lock.notify();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
+
+        synchronized (lock)
+        {
+            try
+            {
+                lock.wait();
+            } catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return WorldAction.from_char(character[0]);
     }
 }

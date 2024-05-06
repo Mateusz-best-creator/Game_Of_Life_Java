@@ -3,7 +3,6 @@ package Organisms.Animals;
 import Organisms.Animal;
 import Organisms.Enums.ActionResult;
 import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
 import Organisms.Enums.OrganismType;
 import Organisms.Organism;
 

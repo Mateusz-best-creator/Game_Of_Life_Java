@@ -123,10 +123,10 @@ public class Human extends Animal implements KeyboardPress
             if (this.get_strength() == human_normal_strength && this.ability_activated) // default human strength
             {
                 this.ability_activated = false;
-                this.ability_local_counter = 5;
+                ability_local_counter = 5;
             }
-            if (!this.ability_activated && this.ability_local_counter != 0)
-                this.ability_local_counter -= 1;
+            if (!this.ability_activated && ability_local_counter != 0)
+                ability_local_counter -= 1;
         }
         return moved;
     }
@@ -185,10 +185,13 @@ public class Human extends Animal implements KeyboardPress
         frame.setFocusable(true);
         frame.requestFocusInWindow();
 
-        synchronized (lock) {
-            try {
+        synchronized (lock)
+        {
+            try
+            {
                 lock.wait();
-            } catch (InterruptedException e) {
+            } catch (InterruptedException e)
+            {
                 e.printStackTrace();
             }
         }

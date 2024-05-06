@@ -4,7 +4,6 @@ import Organisms.Enums.*;
 import Organisms.Organism;
 import Organisms.Plant;
 
-import javax.swing.*;
 import java.util.Vector;
 
 public class SowThistle extends Plant

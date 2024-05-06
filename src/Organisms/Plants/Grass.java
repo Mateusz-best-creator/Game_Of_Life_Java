@@ -2,7 +2,6 @@ package Organisms.Plants;
 
 import Organisms.Enums.ActionResult;
 import Organisms.Enums.CollisionResult;
-import Organisms.Enums.CollisionType;
 import Organisms.Enums.OrganismType;
 import Organisms.Organism;
 import Organisms.Plant;

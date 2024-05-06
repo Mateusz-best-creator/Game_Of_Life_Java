@@ -2,7 +2,6 @@ package Organisms;
 
 import Organisms.Enums.*;
 
-import javax.swing.*;
 import java.util.Vector;
 
 public abstract class Plant extends Organism
