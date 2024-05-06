@@ -5,6 +5,7 @@ public enum WorldAction
     READ_FROM_FILE('r'),
     QUIT('q'),
     ADDING('a'),
+    CELL_NOT_EMPTY('e'),
     PLAY('p');
 
     private final char character;

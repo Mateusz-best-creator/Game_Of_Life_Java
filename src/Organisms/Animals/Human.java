@@ -201,8 +201,8 @@ public class Human extends Animal implements KeyboardPress
     {
         if (!ability_activated && ability_local_counter == 0)
         {
-            System.out.println("Activating human special ability: MAGICAL POTION...");
             this.set_strength(this.get_strength() + ABILITY_STRENGTH_BOOST);
+            System.out.println("Activating human special ability: MAGICAL POTION, new strength = " + this.get_strength());
             ability_activated = true;
         }
         else if (ability_activated)

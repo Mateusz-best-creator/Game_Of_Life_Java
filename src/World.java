@@ -72,7 +72,7 @@ public class World
         int humanIndex = -1;
         for (int i = 0; i < this.organisms.size(); i++)
         {
-            if (this.organisms.get(i) instanceof Human)
+            if (this.organisms.get(i).get_type() == OrganismType.HUMAN)
             {
                 humanIndex = i;
                 break;
@@ -211,10 +211,22 @@ public class World
                 this.read_from_file();
                 continue;
             }
+            else if (worldAction == WorldAction.CELL_NOT_EMPTY)
+            {
+                System.out.println("Cant add organism here, cell is not empty...");
+                continue;
+            }
             else if (worldAction == WorldAction.QUIT)
             {
                 playing = false;
                 continue;
+            }
+            // Playing case
+            else if (worldAction == WorldAction.ADDING)
+            {
+                this.sort_organisms();
+                this.update_board();
+                this.drawBoard();
             }
 
             System.out.println("\n###\tTurn " + this.turn_number + "\t###\n");
@@ -408,13 +420,13 @@ public class World
                     String msg = temp_human.string_check_ability();
                     int ability_counter = Human.get_ability_local_counter();
 
-                    writer.write(o.get_character() + " " + o.get_initiative() + " " + o.get_name() + " " + o.get_row() + " "
+                    writer.write(o.get_character() + " " + o.get_age() + " " + o.get_name() + " " + o.get_row() + " "
                             + o.get_column() + " " + o.get_strength() + " " + o.get_initiative() + " "
                             + msg + " " + ability_counter + "\n");
                 }
                 else
                 {
-                    writer.write(o.get_character() + " " + o.get_initiative() + " " + o.get_name() + " " + o.get_row() + " "
+                    writer.write(o.get_character() + " " + o.get_age() + " " + o.get_name() + " " + o.get_row() + " "
                             + o.get_column() + " " + o.get_strength() + " " + o.get_initiative() + "\n");
                 }
             }
@@ -428,7 +440,11 @@ public class World
 
     public void read_from_file()
     {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME))) {
+        for (int i = 0; i < this.grid_board.length; i++)
+            for (int j = 0; j < this.grid_board[0].length; j++)
+                this.grid_board[i][j] = 'e';
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME)))
+        {
             String line;
             // Read the first line (special) separately
             if ((line = reader.readLine()) != null)
@@ -560,11 +576,10 @@ public class World
                 // Calculate the square numbers
                 int squareRow = calculate_row(e.getY());
                 int squareCol = calculate_column(e.getX());
-                System.out.println("Mouse clicked at: X=" + squareRow + ", Y=" + squareCol);
 
                 if(!check_if_empty(squareRow, squareCol))
                 {
-                    System.out.println("Cant add organism at (" + squareRow + ", " + squareCol + "), cell is not empty...");
+                    character[0] = 'e';
                     return;
                 }
 
@@ -598,9 +613,6 @@ public class World
                     case 'O': type = OrganismType.SOSNOWSKY_HOGWEED; break;
                 }
                 add_organism(type, 1, squareRow, squareCol);
-                sort_organisms();
-                update_board();
-                drawBoard();
                 if (type != null)
                 {
                     System.out.println("Adding new " + type.name() + " at (" + squareRow + ", " + squareCol + ")");

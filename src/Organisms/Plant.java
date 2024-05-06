@@ -27,8 +27,6 @@ public abstract class Plant extends Organism
         double rand = Math.random();
         if (rand >= probability || this.get_organism_counter() > MAX_ANIMAL_AMOUNT)
         {
-            if  (this.get_organism_counter() > MAX_ANIMAL_AMOUNT)
-                System.out.println("Cant create another " + this.get_name() + " we already have " + this.get_organism_counter() + " of them...");
             return new ActionResult(ActionType.STAY);
         }
         else
