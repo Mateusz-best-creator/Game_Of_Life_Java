@@ -4,6 +4,7 @@ public enum WorldAction
     SAVE_TO_FILE('s'),
     READ_FROM_FILE('r'),
     QUIT('q'),
+    ADDING('a'),
     PLAY('p');
 
     private final char character;

@@ -2,6 +2,8 @@
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -118,6 +120,8 @@ public class World
 
     private void add_organism(OrganismType type, int randomAmount, int specified_row, int specified_column)
     {
+        if (type == null)
+            return;
         for (int i = 0; i < randomAmount; i++)
         {
             int random_row = rand.nextInt(this.board_height);
@@ -142,27 +146,27 @@ public class World
                 case WOLF:
                     this.organisms.add(new Wolf(random_row, random_column));
                     break;
-                case SHEEP:
-                    this.organisms.add(new Sheep(random_row, random_column));
-                    break;
-                case FOX:
-                    this.organisms.add(new Fox(random_row, random_column));
-                    break;
-                case TURTLE:
-                    this.organisms.add(new Turtle(random_row, random_column));
-                    break;
-                case ANTELOPE:
-                    this.organisms.add(new Antelope(random_row, random_column));
-                    break;
+//                case SHEEP:
+//                    this.organisms.add(new Sheep(random_row, random_column));
+//                    break;
+//                case FOX:
+//                    this.organisms.add(new Fox(random_row, random_column));
+//                    break;
+//                case TURTLE:
+//                    this.organisms.add(new Turtle(random_row, random_column));
+//                    break;
+//                case ANTELOPE:
+//                    this.organisms.add(new Antelope(random_row, random_column));
+//                    break;
                 case CYBER_SHEEP:
                     this.organisms.add(new CyberSheep(random_row, random_column));
                     break;
-                case GRASS:
-                    this.organisms.add(new Grass(random_row, random_column));
-                    break;
-                case SOW_THISTLE:
-                    this.organisms.add(new SowThistle(random_row, random_column));
-                    break;
+//                case GRASS:
+//                    this.organisms.add(new Grass(random_row, random_column));
+//                    break;
+//                case SOW_THISTLE:
+//                    this.organisms.add(new SowThistle(random_row, random_column));
+//                    break;
                 case GUARANA:
                     this.organisms.add(new Guarana(random_row, random_column));
                     break;
@@ -196,7 +200,7 @@ public class World
         while (playing)
         {
             // get keyboard press and wait until it is p or s or l
-            WorldAction worldAction = this.get_keyboard_key(this.frame);
+            WorldAction worldAction = this.get_pressed_key(this.frame);
             if (worldAction == WorldAction.SAVE_TO_FILE)
             {
                 this.save_to_file();
@@ -442,18 +446,18 @@ public class World
                 String[] split_fragments = line.split(" ");
                 OrganismType type = OrganismType.fromChar(split_fragments[0].charAt(0));
                 int age = Integer.parseInt(split_fragments[1]);
-                int row = Integer.parseInt(split_fragments[2]);
-                int column = Integer.parseInt(split_fragments[3]);
-                int strength = Integer.parseInt(split_fragments[4]);
-                int initiative = Integer.parseInt(split_fragments[5]);
+                int row = Integer.parseInt(split_fragments[3]);
+                int column = Integer.parseInt(split_fragments[4]);
+                int strength = Integer.parseInt(split_fragments[5]);
+                int initiative = Integer.parseInt(split_fragments[6]);
 
                 if (type == OrganismType.HUMAN)
                 {
                     boolean ability_activated = false;
-                    String bool_result = split_fragments[6];
+                    String bool_result = split_fragments[7];
                     if (Objects.equals(bool_result, "YES"))
                         ability_activated = true;
-                    int ability_counter_from_file = Integer.parseInt(split_fragments[7]);
+                    int ability_counter_from_file = Integer.parseInt(split_fragments[8]);
                     this.organisms.add(new Human(row, column, age, ability_activated, ability_counter_from_file));
                 }
                 else
@@ -469,6 +473,8 @@ public class World
             this.sort_organisms();
             // Update board characters
             this.update_board();
+            // Draw board
+            this.drawBoard();
         }
         catch (IOException e)
         {
@@ -477,7 +483,22 @@ public class World
         }
     }
 
-    private WorldAction get_keyboard_key(JFrame frame)
+    private int calculate_row(int row_click)
+    {
+        return row_click / this.image_height;
+    }
+
+    private int calculate_column(int col_click)
+    {
+        return col_click / this.image_width;
+    }
+
+    private boolean check_if_empty(int row, int col)
+    {
+        return this.grid_board[row][col] == 'e';
+    }
+
+    private WorldAction get_pressed_key(JFrame frame)
     {
         final char[] character = new char[1];
         Object lock = new Object();
@@ -530,6 +551,63 @@ public class World
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+
+        frame.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                // Calculate the square numbers
+                int squareRow = calculate_row(e.getY());
+                int squareCol = calculate_column(e.getX());
+                System.out.println("Mouse clicked at: X=" + squareRow + ", Y=" + squareCol);
+
+                if(!check_if_empty(squareRow, squareCol))
+                {
+                    System.out.println("Cant add organism at (" + squareRow + ", " + squareCol + "), cell is not empty...");
+                    return;
+                }
+
+                System.out.println("w -> wolf\ts -> sheep");
+                System.out.println("f -> fox\tt -> turtle\ta -> antelope");
+                System.out.println("c -> cyber_sheep\tG -> grass\tS -> sow_thistle");
+                System.out.println("B -> belladonna\tU -> guarana\tO -> sosnowsky_hogweed");
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("\nPlease choose type of organism you want to add: ");
+                char new_organism_character = scanner.nextLine().charAt(0);
+
+                synchronized (lock)
+                {
+                    // Means we add new character
+                    character[0] = 'a';
+                    lock.notify();
+                }
+                OrganismType type = null;
+                switch (new_organism_character)
+                {
+                    case 'w': type = OrganismType.WOLF; break;
+                    case 's': type = OrganismType.SHEEP; break;
+                    case 'f': type = OrganismType.FOX; break;
+                    case 't': type = OrganismType.TURTLE; break;
+                    case 'a': type = OrganismType.ANTELOPE; break;
+                    case 'c': type = OrganismType.CYBER_SHEEP; break;
+                    case 'G': type = OrganismType.GRASS; break;
+                    case 'S': type = OrganismType.SOW_THISTLE; break;
+                    case 'B': type = OrganismType.BELLADONNA; break;
+                    case 'U': type = OrganismType.GUARANA; break;
+                    case 'O': type = OrganismType.SOSNOWSKY_HOGWEED; break;
+                }
+                add_organism(type, 1, squareRow, squareCol);
+                sort_organisms();
+                update_board();
+                drawBoard();
+                if (type != null)
+                {
+                    System.out.println("Adding new " + type.name() + " at (" + squareRow + ", " + squareCol + ")");
+                }
+            }
+        });
+
         frame.setFocusable(true);
         frame.requestFocusInWindow();
 
