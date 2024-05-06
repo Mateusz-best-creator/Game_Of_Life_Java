@@ -1,8 +1,32 @@
-10 10
-H 10 Human 4 1 11 4 NO 0
-B 10 Belladonna 4 3 99 0
-O 10 Sosnowsky_hogweed 3 8 10 0
-B 6 Belladonna 3 2 99 0
-B 5 Belladonna 3 3 99 0
-B 4 Belladonna 2 1 99 0
-B 0 Belladonna 1 0 99 0
+20 20
+H 0 Human 13 6 14 4 YES 0
+f 0 fox 0 0 3 7
+f 0 fox 0 1 3 7
+w 0 wolf 5 0 12 5
+w 0 wolf 4 16 9 5
+s 0 sheep 19 17 4 4
+a 0 antelope 12 11 4 4
+c 0 cyber_sheep 11 13 14 4
+c 0 cyber_sheep 15 19 11 4
+t 0 turtle 5 8 2 1
+G 0 Grass 7 4 0 0
+G 0 Grass 10 9 0 0
+G 0 Grass 7 16 0 0
+S 0 Sow_thistle 4 7 0 0
+B 0 Belladonna 15 4 99 0
+O 0 Sosnowsky_hogweed 15 18 10 0
+S 0 Sow_thistle 3 6 0 0
+U 0 Guarana 7 12 0 0
+G 0 Grass 6 3 0 0
+U 0 Guarana 6 11 0 0
+G 0 Grass 6 4 0 0
+G 0 Grass 9 8 0 0
+G 0 Grass 6 15 0 0
+S 0 Sow_thistle 2 5 0 0
+U 0 Guarana 6 12 0 0
+S 0 Sow_thistle 3 7 0 0
+S 0 Sow_thistle 1 4 0 0
+f 0 fox 1 0 3 7
+U 0 Guarana 5 10 0 0
+S 0 Sow_thistle 2 6 0 0
+S 0 Sow_thistle 0 3 0 0

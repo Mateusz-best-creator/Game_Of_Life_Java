@@ -68,6 +68,7 @@ public class World
 
     private void sort_organisms()
     {
+        System.out.println("Sorting Orgtanisms!!!\n");
         // Find the index of the human (if exists)
         int humanIndex = -1;
         for (int i = 0; i < this.organisms.size(); i++)
@@ -115,7 +116,6 @@ public class World
             else
                 this.add_organism(type, randomAmount, -1, -1);
         }
-        this.sort_organisms();
     }
 
     private void add_organism(OrganismType type, int randomAmount, int specified_row, int specified_column)
@@ -146,27 +146,27 @@ public class World
                 case WOLF:
                     this.organisms.add(new Wolf(random_row, random_column));
                     break;
-//                case SHEEP:
-//                    this.organisms.add(new Sheep(random_row, random_column));
-//                    break;
-//                case FOX:
-//                    this.organisms.add(new Fox(random_row, random_column));
-//                    break;
-//                case TURTLE:
-//                    this.organisms.add(new Turtle(random_row, random_column));
-//                    break;
-//                case ANTELOPE:
-//                    this.organisms.add(new Antelope(random_row, random_column));
-//                    break;
+                case SHEEP:
+                    this.organisms.add(new Sheep(random_row, random_column));
+                    break;
+                case FOX:
+                    this.organisms.add(new Fox(random_row, random_column));
+                    break;
+                case TURTLE:
+                    this.organisms.add(new Turtle(random_row, random_column));
+                    break;
+                case ANTELOPE:
+                    this.organisms.add(new Antelope(random_row, random_column));
+                    break;
                 case CYBER_SHEEP:
                     this.organisms.add(new CyberSheep(random_row, random_column));
                     break;
-//                case GRASS:
-//                    this.organisms.add(new Grass(random_row, random_column));
-//                    break;
-//                case SOW_THISTLE:
-//                    this.organisms.add(new SowThistle(random_row, random_column));
-//                    break;
+                case GRASS:
+                    this.organisms.add(new Grass(random_row, random_column));
+                    break;
+                case SOW_THISTLE:
+                    this.organisms.add(new SowThistle(random_row, random_column));
+                    break;
                 case GUARANA:
                     this.organisms.add(new Guarana(random_row, random_column));
                     break;
@@ -192,8 +192,6 @@ public class World
     {
         // Draw starting board
         this.drawBoard();
-        // sort organisms
-        this.sort_organisms();
 
         boolean playing = true;
 
@@ -221,21 +219,19 @@ public class World
                 playing = false;
                 continue;
             }
-            // Playing case
-            else if (worldAction == WorldAction.ADDING)
-            {
-                this.sort_organisms();
-                this.update_board();
-                this.drawBoard();
-            }
+            // Playing/Adding case
+            else if (worldAction == WorldAction.PLAY || worldAction == WorldAction.ADDING){}
+
 
             System.out.println("\n###\tTurn " + this.turn_number + "\t###\n");
             int organism_index = 0;
 
+            this.sort_organisms();
+            this.update_board();
+            this.drawBoard();
+
             for (Organism organism : this.organisms)
             {
-                organism.increment_age();
-
                 if (this.organism_indexes_to_remove.contains(organism_index))
                 {
                     continue;
@@ -257,8 +253,6 @@ public class World
             organisms_coords_to_remove.clear();
             organism_indexes_to_remove.clear();
 
-            // Update board characters
-            this.update_board();
             // Draw board after changes
             this.drawBoard();
         }
@@ -440,9 +434,6 @@ public class World
 
     public void read_from_file()
     {
-        for (int i = 0; i < this.grid_board.length; i++)
-            for (int j = 0; j < this.grid_board[0].length; j++)
-                this.grid_board[i][j] = 'e';
         try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME)))
         {
             String line;
@@ -454,6 +445,12 @@ public class World
                 this.board_height = Integer.parseInt(split_fragments[1]);
                 this.image_height = this.screen_height / this.board_height;
                 this.image_width = this.screen_width / this.board_width;
+
+                // Update grid board size
+                this.grid_board = new char[this.board_width][this.board_height];
+                for (int i = 0; i < this.grid_board.length; i++)
+                    for (int j = 0; j < this.grid_board[0].length; j++)
+                        this.grid_board[i][j] = 'e';
             }
             this.organisms.clear();
             // Loop through the rest of the file
