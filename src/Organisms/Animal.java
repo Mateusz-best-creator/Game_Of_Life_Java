@@ -107,7 +107,16 @@ public abstract class Animal extends Organism
                 // Fight case
                 else
                 {
-                    if (this.get_strength() >= organism.get_strength())
+                    // In case of poison plants we need to kill the attacker and the defender
+                    if (organism.get_type() == OrganismType.BELLADONNA || organism.get_type() == OrganismType.SOSNOWSKY_HOGWEED)
+                    {
+                        int[] a = {current_index, index};
+                        System.out.println(this.get_name() + " eat " + organism.get_name() + ", "
+                                + organism.get_name() + " eat " + this.get_name() + " at ("
+                                + this.row + ", " + this.column + ")");
+                        return new CollisionResult(CollisionType.POISON_PLANT, a);
+                    }
+                    else if (this.get_strength() >= organism.get_strength())
                     {
                         System.out.println(this.get_name()  + " vs + " + organism.get_name() + " at: (" + this.get_row() + ", " +
                                 this.get_column() + ") -> " + this.get_name() + " wins...");

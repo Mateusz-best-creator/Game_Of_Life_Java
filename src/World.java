@@ -68,7 +68,6 @@ public class World
 
     private void sort_organisms()
     {
-        System.out.println("Sorting Orgtanisms!!!\n");
         // Find the index of the human (if exists)
         int humanIndex = -1;
         for (int i = 0; i < this.organisms.size(); i++)
@@ -183,6 +182,7 @@ public class World
             int new_size = this.organisms.size();
             if (new_size > start_size)
             {
+                assert random_row < this.board_height && random_column < this.board_width;
                 this.grid_board[random_row][random_column] = this.organisms.get(this.organisms.size() - 1).get_character();
             }
         }
@@ -232,6 +232,7 @@ public class World
 
             for (Organism organism : this.organisms)
             {
+                organism.increment_age();
                 if (this.organism_indexes_to_remove.contains(organism_index))
                 {
                     continue;
