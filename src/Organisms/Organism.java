@@ -99,20 +99,6 @@ public abstract class Organism
         return this.column;
     }
 
-//    public int get_previous_row() { return this.previous_row; }
-//
-//    public int get_previous_column() { return this.previous_column; }
-//
-//    public void set_row(int r)
-//    {
-//        this.row = r;
-//    }
-//
-//    public void set_column(int c)
-//    {
-//        this.column = c;
-//    }
-
     public void set_strength(int s) { this.strength = s; }
     public void set_initiative(int i) { this.initiative = i; }
 

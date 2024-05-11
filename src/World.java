@@ -75,6 +75,7 @@ public class World
             if (this.organisms.get(i).get_type() == OrganismType.HUMAN)
             {
                 humanIndex = i;
+                System.out.println("Human is at index: " + humanIndex);
                 break;
             }
         }
@@ -97,8 +98,7 @@ public class World
     {
         int cells = this.board_height * this.board_width;
         int max_amount;
-        if (cells < 25) max_amount = 1;
-        else if (cells < 50) max_amount = 2;
+        if (cells < 50) max_amount = 1;
         else if (cells < 120) max_amount = 3;
         else max_amount = 4;
 
@@ -221,14 +221,14 @@ public class World
             }
             // Playing/Adding case
             else if (worldAction == WorldAction.PLAY || worldAction == WorldAction.ADDING){}
+            else continue;
 
 
             System.out.println("\n###\tTurn " + this.turn_number + "\t###\n");
-            int organism_index = 0;
-
             this.sort_organisms();
             this.update_board();
             this.drawBoard();
+            int organism_index = 0;
 
             for (Organism organism : this.organisms)
             {
@@ -499,7 +499,7 @@ public class World
 
     private int calculate_row(int row_click)
     {
-        return row_click / this.image_height;
+        return row_click / this.image_height - 1; // We index from 0
     }
 
     private int calculate_column(int col_click)
@@ -574,6 +574,7 @@ public class World
                 // Calculate the square numbers
                 int squareRow = calculate_row(e.getY());
                 int squareCol = calculate_column(e.getX());
+//                System.out.println("Row = " + squareRow + " Col = " + squareCol);
 
                 if(!check_if_empty(squareRow, squareCol))
                 {

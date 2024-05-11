@@ -215,11 +215,6 @@ public class Human extends Animal implements KeyboardPress
         }
     }
 
-    public boolean check_ability()
-    {
-        return this.ability_activated;
-    }
-
     public String string_check_ability()
     {
         if (ability_activated)

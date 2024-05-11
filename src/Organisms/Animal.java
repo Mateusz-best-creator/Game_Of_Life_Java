@@ -108,7 +108,7 @@ public abstract class Animal extends Organism
                 else
                 {
                     // In case of poison plants we need to kill the attacker and the defender
-                    if (organism.get_type() == OrganismType.BELLADONNA || organism.get_type() == OrganismType.SOSNOWSKY_HOGWEED)
+                    if (organism.get_type() == OrganismType.BELLADONNA || (organism.get_type() == OrganismType.SOSNOWSKY_HOGWEED && this.get_type() != OrganismType.CYBER_SHEEP))
                     {
                         int[] a = {current_index, index};
                         System.out.println(this.get_name() + " eat " + organism.get_name() + ", "
