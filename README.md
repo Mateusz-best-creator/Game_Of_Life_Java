@@ -14,3 +14,5 @@ Once you've cloned the project, you can open your IDE and start the game! Messag
 - Press `r` to read the state of the game from a file
 
 Once you've clicked `p`, you can use the arrow keys to move the human if they are alive or press `s` to activate the human's special ability, which temporarily increases their strength.
+
+<img src="Screenshots/Game_Of_Life_Java.png" alt="Start Page" width="450">
